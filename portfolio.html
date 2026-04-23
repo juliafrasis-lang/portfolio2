@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Julia Farias — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E8192C;
+    --red-dim: #9B1020;
+    --white: #F5F5F0;
+    --white-muted: #A0A09A;
+    --black: #0A0A0A;
+    --black-2: #111111;
+    --black-3: #1A1A1A;
+    --black-4: #222222;
+    --border: rgba(245,245,240,0.08);
+    --border-red: rgba(232,25,44,0.3);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed; top: 0; left: 0; width: 12px; height: 12px;
+    background: var(--red); border-radius: 50%; pointer-events: none;
+    z-index: 9999; transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: normal;
+  }
+  .cursor-ring {
+    position: fixed; top: 0; left: 0; width: 36px; height: 36px;
+    border: 1px solid rgba(232,25,44,0.5); border-radius: 50%;
+    pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
+    transition: all 0.12s ease-out;
+  }
+  body:hover .cursor { opacity: 1; }
+  a:hover ~ .cursor, button:hover ~ .cursor { width: 20px; height: 20px; }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 48px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 18px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--white);
+    text-decoration: none; display: flex; align-items: center; gap: 2px;
+  }
+  .nav-logo .dot { color: var(--red); font-size: 22px; line-height: 0; }
+
+  .nav-links {
+    display: flex; gap: 40px; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500; font-size: 13px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--white-muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(232,25,44,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-text { position: relative; z-index: 1; max-width: 860px; }
+
+  .hero-name-row {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    margin-bottom: 24px;
+  }
+
+  /* INLINE PHOTO */
+  .hero-photo-inline {
+    flex-shrink: 0;
+  }
+
+  .photo-frame-sm {
+    position: relative; width: 160px; height: 190px;
+  }
+
+  .photo-frame-sm .photo-border-deco {
+    position: absolute; top: -10px; right: -10px;
+    width: 100%; height: 100%;
+    border: 1px solid var(--border-red);
+    pointer-events: none;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  }
+
+  .photo-frame-sm .photo-placeholder {
+    width: 100%; height: 100%;
+    background: var(--black-3);
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+    position: relative; overflow: hidden;
+  }
+
+  .photo-frame-sm .photo-placeholder img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); margin-bottom: 32px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-tag::before {
+    content: ''; display: block; width: 32px; height: 1px; background: var(--red);
+  }
+
+  .hero-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(64px, 8vw, 110px);
+    font-weight: 900; line-height: 0.9;
+    text-transform: uppercase; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .hero-name span { color: var(--red); }
+
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 300; font-size: 20px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--white-muted);
+    margin-bottom: 40px;
+    border-left: 2px solid var(--red); padding-left: 16px;
+  }
+
+  .hero-bio {
+    font-size: 15px; line-height: 1.8; color: var(--white-muted);
+    max-width: 480px; margin-bottom: 48px;
+  }
+
+  .hero-cta {
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 13px; letter-spacing: 0.15em;
+    text-transform: uppercase; padding: 14px 32px;
+    text-decoration: none; transition: all 0.25s; cursor: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary {
+    background: var(--red); color: var(--white);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .btn-primary:hover { background: #ff1f35; transform: translateY(-2px); }
+  .btn-outline {
+    border: 1px solid var(--border); color: var(--white-muted);
+  }
+  .btn-outline:hover { border-color: var(--white-muted); color: var(--white); }
+
+  .photo-placeholder-inner {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--white-muted);
+  }
+
+  .photo-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--border-red); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--red);
+  }
+
+  .photo-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--white-muted); text-align: center;
+  }
+
+  /* SECTION BASE */
+  section { padding: 100px 48px; position: relative; }
+
+  .section-header {
+    display: flex; align-items: baseline; gap: 24px;
+    margin-bottom: 64px;
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--red); letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 5vw, 56px); font-weight: 900;
+    text-transform: uppercase; letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .section-line {
+    flex: 1; height: 1px; background: var(--border); margin-left: 24px;
+    align-self: center;
+  }
+
+  /* MANIFESTO */
+  .manifesto {
+    background: var(--black-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .manifesto-grid {
+    display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;
+  }
+
+  .manifesto-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--red); margin-bottom: 16px;
+  }
+
+  .manifesto-aside {
+    padding-top: 8px;
+  }
+
+  .manifesto-aside h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px; font-weight: 700; text-transform: uppercase;
+    line-height: 1.2; margin-bottom: 24px;
+  }
+
+  .manifesto-quote {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(28px, 4vw, 48px); font-weight: 700;
+    line-height: 1.15; text-transform: uppercase; letter-spacing: -0.01em;
+    color: var(--white);
+  }
+  .manifesto-quote em {
+    font-style: normal; color: var(--red);
+  }
+
+  .manifesto-body {
+    margin-top: 40px; font-size: 16px; line-height: 1.9;
+    color: var(--white-muted); max-width: 600px;
+  }
+
+  .manifesto-body p + p { margin-top: 20px; }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .project-card {
+    background: var(--black);
+    display: flex; flex-direction: column;
+    transition: background 0.3s;
+    position: relative; overflow: hidden;
+    cursor: none;
+  }
+
+  .project-card:hover { background: var(--black-3); }
+
+  .project-card:hover .project-img-overlay { opacity: 1; }
+
+  .project-img {
+    aspect-ratio: 16/10; overflow: hidden; position: relative;
+    background: var(--black-3);
+  }
+
+  .project-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s ease;
+    filter: grayscale(30%);
+  }
+  .project-card:hover .project-img img { transform: scale(1.04); filter: grayscale(0%); }
+
+  .project-img-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--black-3);
+  }
+
+  .project-img-placeholder svg { opacity: 0.15; }
+
+  .project-img-overlay {
+    position: absolute; inset: 0;
+    background: rgba(232,25,44,0.06);
+    opacity: 0; transition: opacity 0.3s;
+  }
+
+  .project-tag {
+    position: absolute; top: 16px; left: 16px;
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    background: var(--red); color: var(--white);
+    padding: 4px 10px;
+  }
+
+  .project-body { padding: 24px 28px 28px; flex: 1; display: flex; flex-direction: column; }
+
+  .project-num {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--red); letter-spacing: 0.1em; margin-bottom: 8px;
+  }
+
+  .project-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.02em; margin-bottom: 12px; line-height: 1.15;
+  }
+
+  .project-desc {
+    font-size: 13px; line-height: 1.75; color: var(--white-muted);
+    flex: 1; margin-bottom: 20px;
+  }
+
+  .project-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--border); padding-top: 16px;
+    margin-top: auto;
+  }
+
+  .project-attach {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--white-muted); letter-spacing: 0.08em;
+    display: flex; align-items: center; gap: 6px;
+    text-decoration: none; transition: color 0.2s;
+    cursor: none;
+  }
+  .project-attach:hover { color: var(--red); }
+
+  .project-arrow {
+    width: 32px; height: 32px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white-muted); font-size: 14px; transition: all 0.2s;
+  }
+  .project-card:hover .project-arrow {
+    background: var(--red); border-color: var(--red); color: var(--white);
+  }
+
+  /* PLACEHOLDER CARD */
+  .project-card.placeholder .project-img-placeholder {
+    background: var(--black-3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* SKILLS */
+  .skills { background: var(--black-2); }
+
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    margin-bottom: 64px;
+  }
+
+  .skill-item {
+    background: var(--black-2); padding: 32px 28px;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: background 0.3s;
+  }
+  .skill-item:hover { background: var(--black-3); }
+
+  .skill-icon {
+    width: 40px; height: 40px; border: 1px solid var(--border-red);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--red); font-size: 16px; margin-bottom: 4px;
+  }
+
+  .skill-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .skill-desc {
+    font-size: 12px; color: var(--white-muted); line-height: 1.6;
+  }
+
+  /* TOOLS STRIP */
+  .tools-strip {
+    border-top: 1px solid var(--border); padding-top: 40px;
+  }
+
+  .tools-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--white-muted); margin-bottom: 20px;
+  }
+
+  .tools-list {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+
+  .tool-chip {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 8px 16px;
+    border: 1px solid var(--border); color: var(--white-muted);
+    transition: all 0.2s;
+  }
+  .tool-chip:hover { border-color: var(--red); color: var(--white); }
+
+  /* CONTACT */
+  .contact { background: var(--black); }
+
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+  }
+
+  .contact-heading {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(40px, 5vw, 68px); font-weight: 900;
+    text-transform: uppercase; line-height: 0.95; letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+  .contact-heading span { color: var(--red); }
+
+  .contact-text {
+    font-size: 15px; line-height: 1.8; color: var(--white-muted); margin-bottom: 40px;
+  }
+
+  .contact-links {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .contact-link-item {
+    display: flex; align-items: center; gap: 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--white-muted); text-decoration: none;
+    padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    transition: color 0.2s; cursor: none;
+  }
+  .contact-link-item:hover { color: var(--white); }
+  .contact-link-item:hover .contact-link-icon { color: var(--red); }
+
+  .contact-link-icon {
+    width: 36px; height: 36px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--white-muted); transition: color 0.2s;
+    flex-shrink: 0;
+  }
+
+  /* FORM */
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+  .form-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--white-muted);
+  }
+
+  .form-input, .form-textarea {
+    background: var(--black-2); border: 1px solid var(--border);
+    color: var(--white); font-family: 'Barlow', sans-serif;
+    font-size: 14px; padding: 14px 16px; outline: none;
+    transition: border-color 0.2s; resize: none;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--red); }
+  .form-textarea { min-height: 120px; }
+
+  .form-submit {
+    align-self: flex-start;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 15px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--white-muted);
+    display: flex; align-items: center; gap: 2px;
+  }
+  .footer-logo .dot { color: var(--red); }
+
+  .footer-copy {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--white-muted); letter-spacing: 0.05em;
+  }
+
+  /* ANIMATED ENTRANCE */
+  .fade-up {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up:nth-child(2) { transition-delay: 0.1s; }
+  .fade-up:nth-child(3) { transition-delay: 0.2s; }
+  .fade-up:nth-child(4) { transition-delay: 0.3s; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--red-dim); }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .hero { padding: 140px 32px 80px; }
+    .manifesto-grid { grid-template-columns: 1fr; gap: 40px; }
+    .projects-grid { grid-template-columns: repeat(3, 1fr); }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    nav { padding: 24px 32px; }
+    section { padding: 80px 32px; }
+    footer { padding: 28px 32px; }
+  }
+  @media (max-width: 860px) {
+    .hero-name-row { gap: 20px; }
+    .photo-frame-sm { width: 120px; height: 144px; }
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    nav { padding: 20px 24px; }
+    section { padding: 64px 24px; }
+    .hero { padding: 110px 24px 64px; }
+    footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+    .photo-frame-sm { width: 100px; height: 120px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">PORTF<span class="dot">·</span>LIO</a>
+  <ul class="nav-links">
+    <li><a href="#manifesto">Manifesto</a></li>
+    <li><a href="#projects">Projetos</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-text">
+    <div class="hero-tag">Employer Branding &amp; Communications</div>
+    <div class="hero-name-row">
+      <div class="hero-photo-inline">
+        <div class="photo-frame-sm">
+          <div class="photo-border-deco"></div>
+<div class="photo-placeholder" id="photoPlaceholder">
+  <img src="julia.jpg" alt="Julia Farias">           
+              <div class="photo-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <span class="photo-label">Sua foto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h1 class="hero-name">JULIA<br><span>FARIAS</span></h1>
+    </div>
+    <p class="hero-title">Strategist · Communications · Marketing</p>
+    <p class="hero-bio">
+      Employer Branding &amp; Internal Comms Specialist com foco em comunicação estratégica, construção de narrativa e conexão humana. Especialista em transformar mensagens corporativas em experiências que engajam, movem e geram resultado.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">Ver Projetos →</a>
+      <a href="#contact" class="btn btn-outline">Falar comigo</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="manifesto">
+  <div class="section-header fade-up">
+    <span class="section-num">01 —</span>
+    <h2 class="section-title">Visão Estratégica</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="manifesto-grid">
+    <div class="manifesto-aside fade-up">
+      <p class="manifesto-label">Manifesto</p>
+      <h3>Comunicação<br>que move<br>pessoas.</h3>
+    </div>
+
+    <div class="fade-up">
+      <p class="manifesto-quote">
+        "GOOD COMMUNICATION<br>DOESN'T JUST INFORM.<br>IT <em>MOVES PEOPLE.</em>"
+      </p>
+      <div class="manifesto-body">
+        <p>
+          Em um mundo saturado de informação, o que uma empresa pode oferecer de mais raro é <strong style="color:var(--white)">significado</strong>. Acredito que comunicação não é um departamento — é o tecido conectivo de toda organização que quer crescer com intenção.
+        </p>
+        <p>
+          Para mim, tecnologia e inteligência humana não são opostos. São colaboradores. Trago junto pensamento estratégico, instinto criativo e um olhar crítico para ajudar times a dizer o que realmente querem dizer.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header fade-up">
+    <span class="section-num">02 —</span>
+    <h2 class="section-title">Projetos</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- PROJETO 1 — PLACEHOLDER -->
+    <div class="project-card placeholder fade-up">
+      <div class="project-img">
+        <div class="project-img-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <div class="project-img-overlay"></div>
+        <span class="project-tag">Employer Branding</span>
+      </div>
+      <div class="project-body">
+        <p class="project-num">PROJECT / 001</p>
+        <h3 class="project-title">Nome do Projeto</h3>
+        <p class="project-desc">
+          Adicione aqui a descrição do projeto. Explique o desafio, a estratégia adotada e o resultado alcançado. Substitua esta imagem por uma screenshot ou visual do projeto.
+        </p>
+        <div class="project-footer">
+          <a href="#" class="project-attach">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Adicionar anexo
+          </a>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJETO 2 — PLACEHOLDER -->
+    <div class="project-card placeholder fade-up">
+      <div class="project-img">
+        <div class="project-img-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="project-img-overlay"></div>
+        <span class="project-tag">Comunicação Interna</span>
+      </div>
+      <div class="project-body">
+        <p class="project-num">PROJECT / 002</p>
+        <h3 class="project-title">Nome do Projeto</h3>
+        <p class="project-desc">
+          Adicione aqui a descrição do projeto. Explique o desafio, a estratégia adotada e o resultado alcançado. Substitua esta imagem por uma screenshot ou visual do projeto.
+        </p>
+        <div class="project-footer">
+          <a href="#" class="project-attach">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Adicionar anexo
+          </a>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJETO 3 — PLACEHOLDER -->
+    <div class="project-card placeholder fade-up">
+      <div class="project-img">
+        <div class="project-img-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="project-img-overlay"></div>
+        <span class="project-tag">Marketing</span>
+      </div>
+      <div class="project-body">
+        <p class="project-num">PROJECT / 003</p>
+        <h3 class="project-title">Nome do Projeto</h3>
+        <p class="project-desc">
+          Adicione aqui a descrição do projeto. Explique o desafio, a estratégia adotada e o resultado alcançado. Substitua esta imagem por uma screenshot ou visual do projeto.
+        </p>
+        <div class="project-footer">
+          <a href="#" class="project-attach">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Adicionar anexo
+          </a>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJETO 4 — PLACEHOLDER -->
+    <div class="project-card placeholder fade-up">
+      <div class="project-img">
+        <div class="project-img-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <div class="project-img-overlay"></div>
+        <span class="project-tag">Conteúdo</span>
+      </div>
+      <div class="project-body">
+        <p class="project-num">PROJECT / 004</p>
+        <h3 class="project-title">Nome do Projeto</h3>
+        <p class="project-desc">
+          Adicione aqui a descrição do projeto. Explique o desafio, a estratégia adotada e o resultado alcançado. Substitua esta imagem por uma screenshot ou visual do projeto.
+        </p>
+        <div class="project-footer">
+          <a href="#" class="project-attach">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Adicionar anexo
+          </a>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJETO 5 — PLACEHOLDER -->
+    <div class="project-card placeholder fade-up">
+      <div class="project-img">
+        <div class="project-img-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <div class="project-img-overlay"></div>
+        <span class="project-tag">Endomarketing</span>
+      </div>
+      <div class="project-body">
+        <p class="project-num">PROJECT / 005</p>
+        <h3 class="project-title">Nome do Projeto</h3>
+        <p class="project-desc">
+          Adicione aqui a descrição do projeto. Explique o desafio, a estratégia adotada e o resultado alcançado. Substitua esta imagem por uma screenshot ou visual do projeto.
+        </p>
+        <div class="project-footer">
+          <a href="#" class="project-attach">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Adicionar anexo
+          </a>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJETO 6 — PLACEHOLDER -->
+    <div class="project-card placeholder fade-up">
+      <div class="project-img">
+        <div class="project-img-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div class="project-img-overlay"></div>
+        <span class="project-tag">AI &amp; Tech</span>
+      </div>
+      <div class="project-body">
+        <p class="project-num">PROJECT / 006</p>
+        <h3 class="project-title">Nome do Projeto</h3>
+        <p class="project-desc">
+          Adicione aqui a descrição do projeto. Explique o desafio, a estratégia adotada e o resultado alcançado. Substitua esta imagem por uma screenshot ou visual do projeto.
+        </p>
+        <div class="project-footer">
+          <a href="#" class="project-attach">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Adicionar anexo
+          </a>
+          <div class="project-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills" id="skills">
+  <div class="section-header fade-up">
+    <span class="section-num">03 —</span>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-item fade-up">
+      <div class="skill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <p class="skill-name">Comunicação Estratégica</p>
+      <p class="skill-desc">Desenvolvimento de narrativas corporativas com intenção e consistência de marca.</p>
+    </div>
+    <div class="skill-item fade-up">
+      <div class="skill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <p class="skill-name">Employer Branding</p>
+      <p class="skill-desc">Construção de marca empregadora autêntica que atrai, engaja e retém talentos.</p>
+    </div>
+    <div class="skill-item fade-up">
+      <div class="skill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <p class="skill-name">Copywriting &amp; Escrita</p>
+      <p class="skill-desc">Textos que conectam — do conceitual ao operacional, sempre com voz de marca.</p>
+    </div>
+    <div class="skill-item fade-up">
+      <div class="skill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <p class="skill-name">AI &amp; Low Code</p>
+      <p class="skill-desc">Construção de plataformas e automações com IA aplicada à comunicação.</p>
+    </div>
+    <div class="skill-item fade-up">
+      <div class="skill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <p class="skill-name">Comunicação Interna</p>
+      <p class="skill-desc">Estratégias de endomarketing que transformam cultura em experiência vivida.</p>
+    </div>
+    <div class="skill-item fade-up">
+      <div class="skill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <p class="skill-name">Criação de Conteúdo</p>
+      <p class="skill-desc">Produção criativa de conteúdo para diferentes canais, públicos e objetivos.</p>
+    </div>
+    <div class="skill-item fade-up">
+      <div class="skill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <p class="skill-name">Comunicação Corporativa</p>
+      <p class="skill-desc">Alinhamento de mensagem institucional em contextos de crise, mudança e crescimento.</p>
+    </div>
+    <div class="skill-item fade-up">
+      <div class="skill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <p class="skill-name">Marketing</p>
+      <p class="skill-desc">Visão de marketing integrado com foco em posicionamento, branding e impacto.</p>
+    </div>
+  </div>
+
+  <div class="tools-strip fade-up">
+    <p class="tools-label">Ferramentas &amp; Plataformas</p>
+    <div class="tools-list">
+      <span class="tool-chip">Notion</span>
+      <span class="tool-chip">Canva</span>
+      <span class="tool-chip">ChatGPT / Claude</span>
+      <span class="tool-chip">Make / Zapier</span>
+      <span class="tool-chip">Google Workspace</span>
+      <span class="tool-chip">LinkedIn</span>
+      <span class="tool-chip">Miro</span>
+      <span class="tool-chip">Typeform</span>
+      <span class="tool-chip">Figma</span>
+      <span class="tool-chip">Vercel</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-header fade-up">
+    <span class="section-num">04 —</span>
+    <h2 class="section-title">Contato</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="contact-grid">
+    <div class="fade-up">
+      <h2 class="contact-heading">VAMOS<br><span>CRIAR</span><br>JUNTOS?</h2>
+      <p class="contact-text">
+        Se você tem um projeto de comunicação, branding ou cultura organizacional em mente — ou simplesmente quer trocar ideias — me manda uma mensagem.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:julia.frasis@gmail.com" class="contact-link-item">
+          <div class="contact-link-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          julia.frasis@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/julia-farias/" target="_blank" rel="noopener" class="contact-link-item">
+          <div class="contact-link-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </div>
+          linkedin.com/in/julia-farias
+        </a>
+        <div class="contact-link-item" style="cursor:default">
+          <div class="contact-link-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          São Paulo, Brasil
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up">
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nome</label>
+            <input type="text" class="form-input" placeholder="Seu nome">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="seu@email.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Assunto</label>
+          <input type="text" class="form-input" placeholder="Sobre o que é?">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mensagem</label>
+          <textarea class="form-textarea" placeholder="Conta mais sobre o projeto ou ideia..."></textarea>
+        </div>
+        <div class="form-submit">
+          <a href="#" class="btn btn-primary" onclick="handleFormSubmit(event)">Enviar Mensagem →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">PORTF<span class="dot">·</span>LIO</span>
+  <span class="footer-copy">© 2025 Julia Farias — All rights reserved</span>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  document.querySelectorAll('a, button, .project-card, .skill-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2)'; ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.transform = 'translate(-50%,-50%) scale(1)'; });
+  });
+
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Form
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const btn = e.target;
+    btn.textContent = 'Enviado ✓';
+    btn.style.background = '#1a6b2a';
+    setTimeout(() => { btn.textContent = 'Enviar Mensagem →'; btn.style.background = ''; }, 3000);
+  }
+</script>
+</body>
+</html>
